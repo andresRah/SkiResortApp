@@ -1,15 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Plugin.FilePicker;
-using Plugin.FilePicker.Abstractions;
-using SkiResort.Services;
-using Xamarin.Forms;
-
-namespace SkiResort.ViewModels
+﻿namespace SkiResort.ViewModels
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
+    using Plugin.FilePicker;
+    using Plugin.FilePicker.Abstractions;
+    using SkiResort.Services;
+    using Xamarin.Forms;
+
     /// <summary>
     /// Test ski view model.
     /// </summary>
@@ -62,15 +62,17 @@ namespace SkiResort.ViewModels
 
                     if (!allowedFilesTypesExts.Any(x => x.Equals(extension)))
                     {
-                        await Application.Current.MainPage.DisplayAlert("Challenge", "Not compatible file", "Ok");
+                        await Application.Current.MainPage.DisplayAlert("Challenge", "Not compatible file!!!", "Ok");
                         return;
                     }
 
-                    Stream fileStream = fileSelected.GetStream();
+                    bool resultDFSProcess = await ProcessFileAsync(fileSelected);
 
-                    SkiDFSPathService SkiDFSPath = new SkiDFSPathService();
-
-                    SkiDFSPath.ProcessAsync(fileStream);
+                    if (!resultDFSProcess)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Challenge", "Get maximum path and drop failed!!!", "Ok");
+                        return;
+                    }
                 }
             }
             catch (Exception ex)
@@ -81,6 +83,19 @@ namespace SkiResort.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        /// <summary>
+        /// Processes the file async.
+        /// </summary>
+        /// <returns>The file async.</returns>
+        /// <param name="fileSelected">File selected.</param>
+        private async Task<bool> ProcessFileAsync(FileData fileSelected)
+        {
+            Stream fileStream = fileSelected.GetStream();
+            ISkiDFSPathService SkiDFSPath = new SkiDFSPathService();
+
+            return await SkiDFSPath.ProcessDFSAsync(fileStream);
         }
     }
 }

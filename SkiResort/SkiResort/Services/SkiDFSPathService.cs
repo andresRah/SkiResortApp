@@ -1,46 +1,110 @@
 ﻿namespace SkiResort.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using SkiResortRoute;
     using Xamarin.Forms;
 
-    public class SkiDFSPathService : ISkiDFSPathService
+    /// <summary>
+    /// Ski DFSP ath service.
+    /// </summary>
+    public class SkiDFSPathService : DFSService, ISkiDFSPathService
     {
-        /// <summary>
-        /// The rows count
-        /// </summary>
-        private int rowsCount { get; set; }
-
-        /// <summary>
-        /// The columns count
-        /// </summary>
-        private int columnsCount { get; set; }
-
-
         /// <summary>
         /// Processes the async.
         /// </summary>
         /// <returns>The async.</returns>
         /// <param name="fileStream">File stream.</param>
-        public async Task ProcessAsync(Stream fileStream) 
+        public override async Task<bool> ProcessDFSAsync(Stream fileStream)
         {
-            #region 1. Read and define GeoMap array from file and the differents Paths and Drops into arrays.
-            Tuple<int, int, int[,], bool> fileRead = await ReadAndDecodeFileAsync(fileStream);
+            bool resultTask = false;
 
-            if (fileRead.Item4 == false) { await Application.Current.MainPage.DisplayAlert("Challenge", "Malformed file", "Ok"); return; }
+            try
+            {
+                #region 1. Read and define GeoMap array from file and the differents Paths and Drops into arrays.
+                Tuple<int, int, int[,], bool> fileRead = await ReadAndDecodeFileAsync(fileStream);
 
-            rowsCount = fileRead.Item1;
-            columnsCount = fileRead.Item2;
+                if (fileRead.Item4 == false) { await Application.Current.MainPage.DisplayAlert("Challenge", "Malformed file", "Ok"); await Task.FromResult(resultTask); }
 
-            int[,] GeoMap = fileRead.Item3;
-            int[,] Path = new int[rowsCount, columnsCount];
-            int[,] Drop = new int[rowsCount, columnsCount];
-            #endregion
+                RowsCount = fileRead.Item1;
+                ColumnsCount = fileRead.Item2;
 
+                int[,] GeoMap = fileRead.Item3;
+                int[,] Path = new int[RowsCount, ColumnsCount];
+                int[,] Drop = new int[RowsCount, ColumnsCount];
+                #endregion
 
+                #region 2. Apply DFS algorithm
+                for (int i = 0; i < RowsCount; i++)
+                {
+                    for (int j = 0; j < ColumnsCount; j++)
+                    {
+                        Navigation PathAux = DFSOperation(i, j, GeoMap);
+                        Path[i, j] = PathAux.PathLenght;
+                        Drop[i, j] = GeoMap[i, j] - GeoMap[PathAux.NavCoords.xCoord, PathAux.NavCoords.yCoord];
+                    }
+                }
+                #endregion
 
+                #region 3. Get Coordinates of point with max path and drop in the Path[] and Drop[]
+
+                int[] maxPathCoordXY = new int[2]; // Coordinate X,Y of point with max path and drop
+                int maxPath = -1;                  // Have the longest path
+                int maxDrop = -1;                  // Have the longest Drop
+
+                // 3.1 Find maxPath and maxDrop 
+                resultTask = GetMaxPath(Path, Drop, maxPathCoordXY, ref maxPath, ref maxDrop);
+
+                if (resultTask == false)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Challenge", "Malformed file imposible get maximun path", "Ok");
+                    return resultTask;
+                }
+                #endregion
+
+                #region 4. Print Maximum Path and Drop
+                Console.WriteLine($"Maximal Path is: {maxPath} \nMaximal Drop is: {maxDrop}");
+                #endregion
+
+                #region 5. Print all Path points from the maximum to the minimum Point (Skiing down)
+
+                // Load respective CoordX and CoordY values
+                List<int> listPath = DFSForMaxPathLength(maxPathCoordXY[0], maxPathCoordXY[1], fileRead.Item3);
+                listPath.Reverse();
+
+                Console.WriteLine($"\nThe Waypoints are: \n\n | XCoord | YCoord | SkiElevation |");
+
+                int[] CoordXY = new int[2];
+                int index = 0;
+                int temp = 0;
+                string printResult = string.Empty;
+
+                foreach (var aux in listPath)
+                {
+                    CoordXY[index % 2] = aux;
+                    index++;
+
+                    if (index % 2 == 0)
+                    {
+                        printResult += string.Format(" |  {0}   |  {1}   | Point value: {2}| \n", temp, aux,
+                                                                                                  fileRead.Item3[CoordXY[0], CoordXY[1]]);
+                    }
+
+                    temp = aux;
+                }
+
+                Console.WriteLine(printResult);
+                #endregion
+            }
+            catch(Exception ex) 
+            {
+                resultTask = false;
+            }
+
+            return resultTask;
         }
 
         /// <summary>

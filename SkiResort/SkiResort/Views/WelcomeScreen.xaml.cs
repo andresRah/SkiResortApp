@@ -1,20 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-
-namespace SkiResort.Views
+﻿namespace SkiResort.Views
 {
+    using System;
+    using System.Threading.Tasks;
+    using Xamarin.Forms;
+    using Xamarin.Forms.Xaml;
+
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WelcomeScreen : ContentPage
     {
+        /// <summary>
+        /// The cont.
+        /// </summary>
         public int cont;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:SkiResort.Views.WelcomeScreen"/> class.
+        /// </summary>
         public WelcomeScreen()
         {
             InitializeComponent();
             cont = 0;
         }
 
+        /// <summary>
+        /// Ons the chart tap gesture tap.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         async void OnChartTapGestureTap(object sender, EventArgs args)
         {
             uint transitionTime = 145;
@@ -58,6 +70,11 @@ namespace SkiResort.Views
                 image.TranslateTo(0, image.X, transitionTime, effect2));
         }
 
+        /// <summary>
+        /// Handles the clicked.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new TestSkiPage());

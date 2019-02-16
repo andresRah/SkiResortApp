@@ -17,4 +17,12 @@
     <None Remove="Assets\screenOne.jpeg" />
     <None Remove="Assets\screenTwo.jpeg" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Views\AboutPage.xaml" />
+    <EmbeddedResource Remove="Views\AboutPage.xaml" />
+    <EmbeddedResource Remove="Views\ItemDetailPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Views\AboutPage.xaml.cs" />
+  </ItemGroup>
 </Project>
