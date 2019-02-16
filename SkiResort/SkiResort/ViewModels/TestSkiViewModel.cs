@@ -17,11 +17,51 @@
     /// </summary>
     public class TestSkiViewModel : BaseViewModel
     {
+        /// <summary>
+        /// The result path and drop.
+        /// </summary>
+        private SkiDFSResponse _resultPathAndDrop;
 
         /// <summary>
         /// The result path and drop.
         /// </summary>
-        public SkiDFSResponse ResultPathAndDrop { get; set; }
+        public SkiDFSResponse ResultPathAndDrop 
+        { 
+           get => _resultPathAndDrop; 
+           set 
+           {
+                _resultPathAndDrop = value;
+
+                if (_resultPathAndDrop.ResultPointsList.Count <= 0)
+                {
+                   IsVisiblePointList = false;
+                }
+
+                IsVisiblePointList = true;
+                OnPropertyChanged();
+                OnPropertyChanged("IsVisiblePointList");
+            } 
+        }
+
+        /// <summary>
+        /// The is visible point list.
+        /// </summary>
+        private bool _isVisiblePointList;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:SkiResort.ViewModels.TestSkiViewModel"/> is
+        /// visible point list.
+        /// </summary>
+        /// <value><c>true</c> if is visible point list; otherwise, <c>false</c>.</value>
+        public bool IsVisiblePointList
+        {
+            get => _isVisiblePointList;
+            set
+            {
+                _isVisiblePointList = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the command load file.
@@ -40,20 +80,15 @@
         public TestSkiViewModel()
         {
             Title = "TestSki";
+            _isVisiblePointList = false;
+
             RegisterCommands();
 
-            ResultPathAndDrop = new SkiDFSResponse
+            _resultPathAndDrop = new SkiDFSResponse
             {
-                MaxDrop = 56,
-                MaxPath = 45,
+                MaxDrop = 0,
+                MaxPath = 0,
                 ResultPointsList = new List<PointsSkiDFSResponse>()
-                {
-                   new PointsSkiDFSResponse { XCoord = 5, YCoord = 9, Altitude = 12},
-                   new PointsSkiDFSResponse { XCoord = 7, YCoord = 6, Altitude = 55},
-                   new PointsSkiDFSResponse { XCoord = 8, YCoord = 3, Altitude = 78},
-                   new PointsSkiDFSResponse { XCoord = 13, YCoord = 2, Altitude = 44},
-                   new PointsSkiDFSResponse { XCoord = 56, YCoord = 34, Altitude = 45}
-                }
             };
         }
 
@@ -88,13 +123,15 @@
                         return;
                     }
 
-                    bool resultDFSProcess = await ProcessFileAsync(fileSelected);
+                    var resultDFSProcess = await ProcessFileAsync(fileSelected);
 
-                    if (!resultDFSProcess)
+                    if (!resultDFSProcess.Item2)
                     {
                         await Application.Current.MainPage.DisplayAlert("Challenge", "Get maximum path and drop failed!!!", "Ok");
                         return;
                     }
+
+                    ResultPathAndDrop = resultDFSProcess?.Item1;
                 }
             }
             catch (Exception ex)
@@ -112,7 +149,7 @@
         /// </summary>
         /// <returns>The file async.</returns>
         /// <param name="fileSelected">File selected.</param>
-        private async Task<bool> ProcessFileAsync(FileData fileSelected)
+        private async Task<Tuple<SkiDFSResponse, bool>> ProcessFileAsync(FileData fileSelected)
         {
             Stream fileStream = fileSelected.GetStream();
             ISkiDFSPathService SkiDFSPath = new SkiDFSPathService();

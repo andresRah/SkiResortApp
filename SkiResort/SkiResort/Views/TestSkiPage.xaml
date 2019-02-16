@@ -4,6 +4,7 @@
              x:Class="SkiResort.Views.TestSkiPage"
              xmlns:vm="clr-namespace:SkiResort.ViewModels"
              NavigationPage.HasNavigationBar="false"
+             BackgroundColor="White"
              Title="{Binding Title}">
     
     <ContentPage.BindingContext>
@@ -32,11 +33,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackLayout BackgroundColor="{StaticResource Accent}" Margin="0" Padding="0"
-                     VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+         <StackLayout BackgroundColor="{StaticResource Accent}" Margin="0" Padding="0"
+                      HorizontalOptions="Fill">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center"
                          Padding="0" Margin="0">
-                <ContentView Padding="0,40,0,20" VerticalOptions="FillAndExpand" Margin="0">
+                <ContentView Padding="0,35,0,20" VerticalOptions="FillAndExpand" Margin="0">
                     <Label Text="Max drop" TextColor="Black" 
                            HorizontalOptions="Center" 
                            FontAttributes="Bold" FontSize="Large"/>                                
@@ -44,10 +45,18 @@
                 </ContentView>
             </StackLayout>
         </StackLayout>
-         <ScrollView Grid.Row="1" VerticalOptions="FillAndExpand" Margin="0" Padding="0">
-            <StackLayout Orientation="Vertical" 
+         <ScrollView Grid.Row="1" Margin="0" Padding="0">
+           <FlexLayout Wrap="Wrap"
+                       Margin="0" 
+                       BackgroundColor="Transparent"                             
+                       AlignItems="Start" 
+                       AlignContent="Center">
+                            
+             <StackLayout Orientation="Vertical" 
                          HorizontalOptions="CenterAndExpand"
-                         Padding="16,15,16,0" Spacing="10">
+                         VerticalOptions="StartAndExpand"
+                          Margin="0,0,0,15"
+                         Padding="16,10,16,0" Spacing="10">
                 <Label FontSize="22" XAlign="Center">
                     <Label.FormattedText>
                         <FormattedString>
@@ -71,101 +80,106 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Button Margin="0,5,0,0" Text="Search file"
-                        CornerRadius="10"
-                        Command="{Binding CommandLoadFile}"
-                        FontSize="15"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
             </StackLayout>
-                        
-          <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" BackgroundColor="White" Margin="0" Padding="0">
+              
+            <StackLayout IsVisible="{Binding IsVisiblePointList}" Orientation="Vertical" VerticalOptions="FillAndExpand" BackgroundColor="White" Margin="0" Padding="0">
             
-            <StackLayout Spacing="0"
-                         Margin="0"
-                         Padding="0"
-                         BackgroundColor="White" Orientation="Horizontal">
-                                
-               <BoxView BackgroundColor="#F75C64" HorizontalOptions="Start" 
-                        VerticalOptions="Fill" WidthRequest="8"/>
-                                
-               <StackLayout Orientation="Vertical" 
-                            Padding="0,5,0,10"
-                            Spacing="5" HorizontalOptions="CenterAndExpand">
-                     <Label Text="Max path" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
-                     <Label Text="{Binding ResultPathAndDrop.MaxPath}" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
-               </StackLayout>                 
-               
+                <StackLayout Spacing="0"
+                             Margin="0"
+                             Padding="0"
+                             BackgroundColor="White" Orientation="Horizontal">
+                                    
+                   <BoxView BackgroundColor="#F75C64" HorizontalOptions="Start" 
+                            VerticalOptions="Fill" WidthRequest="8"/>
+                                    
+                   <StackLayout Orientation="Vertical" 
+                                Padding="0,5,0,10"
+                                Spacing="5" HorizontalOptions="CenterAndExpand">
+                         <Label Text="Max path" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
+                         <Label Text="{Binding ResultPathAndDrop.MaxPath}" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
+                   </StackLayout>                 
+                   
                    <StackLayout Padding="0,5,0,10" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
-                        <Label Text="Max drop" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
-                        <Label Text="{Binding ResultPathAndDrop.MaxDrop}" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
-                    </StackLayout>                 
-            </StackLayout>
-                            
-            <StackLayout Orientation="Horizontal" Padding="10,5,0,5" 
-                         Margin="0,-6,0,0"
-                         BackgroundColor="{StaticResource Secondary}" Spacing="0">
-                    <Label Text="Results" FontSize="15" VerticalOptions="CenterAndExpand" FontAttributes="Bold" Margin="0"/>
-                    <Label Text=" X, Y Coordinates and Altitude" VerticalOptions="CenterAndExpand" FontSize="15" FontAttributes="Italic" Margin="0"/>
-            </StackLayout>                
-            <ListView x:Name="MyList"
-                      CachingStrategy="RecycleElement" 
-                      ItemsSource="{Binding ResultPathAndDrop.ResultPointsList}" 
-                      BackgroundColor="White"
-                      RowHeight="38"
-                      Margin="0,-5,0,5"
-                      VerticalOptions="FillAndExpand">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell IsEnabled="False">
-                            <Grid HorizontalOptions="StartAndExpand" Margin="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="30" />
-                                    <ColumnDefinition Width="10*" />
-                                    <ColumnDefinition Width="10*" />
-                                    <ColumnDefinition Width="10*" />
-                                </Grid.ColumnDefinitions>
+                            <Label Text="Max drop" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
+                            <Label Text="{Binding ResultPathAndDrop.MaxDrop}" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
+                        </StackLayout>                 
+                   </StackLayout>
                                 
-                                <StackLayout Grid.Column="0" 
-                                            VerticalOptions="CenterAndExpand" 
-                                            HorizontalOptions="FillAndExpand"
-                                            Padding="4,0,4,0">
-                                        <Image Source="stars.png" VerticalOptions="Center" MinimumWidthRequest="6"/>        
-                                </StackLayout>
-                                <StackLayout Grid.Column="1" 
-                                             VerticalOptions="CenterAndExpand" 
-                                             HorizontalOptions="FillAndExpand">
-                                    <Label Text="{Binding XCoord, Mode=OneWay}" 
-                                           TextColor="Black" 
-                                           FontSize="14"
-                                           VerticalTextAlignment="Center"/>
-                                </StackLayout>
-                                <StackLayout Grid.Column="2" 
-                                             VerticalOptions="CenterAndExpand" 
-                                             HorizontalOptions="FillAndExpand">
-                                    <Label Text="{Binding YCoord, Mode=OneWay}" 
-                                           TextColor="Black" 
-                                           FontSize="14"
-                                           VerticalTextAlignment="Center"/>
-                                </StackLayout>
-                                <StackLayout Grid.Column="3" 
-                                             VerticalOptions="CenterAndExpand" 
-                                             HorizontalOptions="EndAndExpand">
-                                    <Label Text="{Binding Altitude, Mode=OneWay}" 
-                                           TextColor="Black" 
-                                           FontSize="14"
-                                           VerticalTextAlignment="Center"/>
-                                </StackLayout>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>            
-                        
+                <StackLayout IsVisible="{Binding IsVisiblePointList}"
+                             Orientation="Horizontal" Padding="10,5,0,5" 
+                             Margin="0,-6,0,0"
+                             BackgroundColor="{StaticResource Secondary}" Spacing="0">
+                        <Label Text="Results" FontSize="15" VerticalOptions="CenterAndExpand" FontAttributes="Bold" Margin="0"/>
+                        <Label Text=" X, Y Coordinates and Altitude" VerticalOptions="CenterAndExpand" FontSize="15" FontAttributes="Italic" Margin="0"/>
+                </StackLayout>                
+                <ListView x:Name="MyList"
+                          CachingStrategy="RecycleElement" 
+                          ItemsSource="{Binding ResultPathAndDrop.ResultPointsList}" 
+                          BackgroundColor="White"
+                          RowHeight="38"
+                          Margin="0,-5,0,5">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell IsEnabled="False">
+                                <Grid HorizontalOptions="StartAndExpand" Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" />
+                                        <ColumnDefinition Width="10*" />
+                                        <ColumnDefinition Width="10*" />
+                                        <ColumnDefinition Width="10*" />
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackLayout Grid.Column="0" 
+                                                VerticalOptions="CenterAndExpand" 
+                                                HorizontalOptions="FillAndExpand"
+                                                Padding="4,0,4,0">
+                                            <Image Source="stars.png" VerticalOptions="Center" MinimumWidthRequest="6"/>        
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="1" 
+                                                 VerticalOptions="CenterAndExpand" 
+                                                 HorizontalOptions="FillAndExpand">
+                                        <Label Text="{Binding XCoord, Mode=OneWay}" 
+                                               TextColor="Black" 
+                                               FontSize="14"
+                                               VerticalTextAlignment="Center"/>
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="2" 
+                                                 VerticalOptions="CenterAndExpand" 
+                                                 HorizontalOptions="FillAndExpand">
+                                        <Label Text="{Binding YCoord, Mode=OneWay}" 
+                                               TextColor="Black" 
+                                               FontSize="14"
+                                               VerticalTextAlignment="Center"/>
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="3" 
+                                                 VerticalOptions="CenterAndExpand" 
+                                                 HorizontalOptions="EndAndExpand">
+                                        <Label Text="{Binding Altitude, Mode=OneWay}" 
+                                               TextColor="Black" 
+                                               FontSize="14"
+                                               VerticalTextAlignment="Center"/>
+                                    </StackLayout>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>            
+            
+           </FlexLayout>
         </ScrollView>
     </Grid>
-           </StackLayout>
+            <Button Margin="0,0,0,10" Text="Search file"
+                    VerticalOptions="EndAndExpand"
+                    MinimumWidthRequest="250"
+                    WidthRequest="250"
+                    HorizontalOptions="Center"
+                    CornerRadius="10"
+                    Command="{Binding CommandLoadFile}"
+                    FontSize="15"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White" />
+   </StackLayout>
            <StackLayout IsVisible="{Binding IsBusy}" 
                          AbsoluteLayout.LayoutFlags="All" 
                          AbsoluteLayout.LayoutBounds="0,0,1,1">

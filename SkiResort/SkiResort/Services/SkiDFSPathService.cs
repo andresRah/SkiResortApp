@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using SkiResort.Models;
     using SkiResortRoute;
     using Xamarin.Forms;
 
@@ -18,9 +19,10 @@
         /// </summary>
         /// <returns>The async.</returns>
         /// <param name="fileStream">File stream.</param>
-        public override async Task<bool> ProcessDFSAsync(Stream fileStream)
+        public override async Task<Tuple<SkiDFSResponse, bool>> ProcessDFSAsync(Stream fileStream)
         {
             bool resultTask = false;
+            SkiDFSResponse response = null;
 
             try
             {
@@ -61,50 +63,61 @@
                 if (resultTask == false)
                 {
                     await Application.Current.MainPage.DisplayAlert("Challenge", "Malformed file imposible get maximun path", "Ok");
-                    return resultTask;
+                    return await Task.FromResult(Tuple.Create(response, false));
                 }
                 #endregion
 
-                #region 4. Print Maximum Path and Drop
-                Console.WriteLine($"Maximal Path is: {maxPath} \nMaximal Drop is: {maxDrop}");
-                #endregion
-
-                #region 5. Print all Path points from the maximum to the minimum Point (Skiing down)
-
-                // Load respective CoordX and CoordY values
-                List<int> listPath = DFSForMaxPathLength(maxPathCoordXY[0], maxPathCoordXY[1], fileRead.Item3);
-                listPath.Reverse();
-
-                Console.WriteLine($"\nThe Waypoints are: \n\n | XCoord | YCoord | SkiElevation |");
-
-                int[] CoordXY = new int[2];
-                int index = 0;
-                int temp = 0;
-                string printResult = string.Empty;
-
-                foreach (var aux in listPath)
-                {
-                    CoordXY[index % 2] = aux;
-                    index++;
-
-                    if (index % 2 == 0)
-                    {
-                        printResult += string.Format(" |  {0}   |  {1}   | Point value: {2}| \n", temp, aux,
-                                                                                                  fileRead.Item3[CoordXY[0], CoordXY[1]]);
-                    }
-
-                    temp = aux;
-                }
-
-                Console.WriteLine(printResult);
-                #endregion
+                response = FormatResultSkiPath(fileRead?.Item3, maxPathCoordXY, maxPath, maxDrop);
             }
-            catch(Exception ex) 
+            catch (Exception ex) 
             {
                 resultTask = false;
             }
 
-            return resultTask;
+            return Tuple.Create(response, resultTask);
+        }
+
+        private SkiDFSResponse FormatResultSkiPath(int[,] fileRead, int[] maxPathCoordXY, int maxPath, int maxDrop)
+        {
+            #region 4. Print Maximum Path and Drop
+            SkiDFSResponse response = new SkiDFSResponse
+            {
+                MaxPath = maxPath,
+                MaxDrop = maxDrop,
+                ResultPointsList = new List<PointsSkiDFSResponse>()
+            };
+            //Console.WriteLine($"Maximal Path is: {maxPath} \nMaximal Drop is: {maxDrop}");
+            #endregion
+
+            #region 5. Print all Path points from the maximum to the minimum Point (Skiing down)
+
+            // Load respective CoordX and CoordY values
+            List<int> listPath = DFSForMaxPathLength(maxPathCoordXY[0], maxPathCoordXY[1], fileRead);
+            listPath.Reverse();
+
+            int[] CoordXY = new int[2];
+            int index = 0;
+            int temp = 0;
+
+            foreach (var aux in listPath)
+            {
+                CoordXY[index % 2] = aux;
+                index++;
+
+                if (index % 2 == 0)
+                {
+                    response.ResultPointsList.Add(new PointsSkiDFSResponse
+                    {
+                        XCoord = temp,
+                        YCoord = aux,
+                        Altitude = fileRead[CoordXY[0], CoordXY[1]]
+                    });
+                }
+
+                temp = aux;
+            }
+            #endregion
+            return response;
         }
 
         /// <summary>

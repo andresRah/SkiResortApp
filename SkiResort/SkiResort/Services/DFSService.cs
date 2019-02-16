@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
+    using SkiResort.Models;
     using SkiResortRoute;
 
     public class DFSService : ISkiDFSPathService
@@ -178,9 +179,10 @@
         /// </summary>
         /// <returns>The DFSA sync.</returns>
         /// <param name="fileStream">File stream.</param>
-        public virtual Task<bool> ProcessDFSAsync(Stream fileStream)
+        public virtual async Task<Tuple<SkiDFSResponse, bool>> ProcessDFSAsync(Stream fileStream)
         {
-            return Task.FromResult(false);
+            SkiDFSResponse response = null;
+            return await Task.FromResult(Tuple.Create(response, false));
         }
     }
 }

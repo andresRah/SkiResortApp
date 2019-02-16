@@ -1,8 +1,10 @@
 ﻿namespace SkiResort.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
+    using SkiResort.Models;
     using SkiResortRoute;
 
     /// <summary>
@@ -44,6 +46,6 @@
         /// </summary>
         /// <returns>The DFSA sync.</returns>
         /// <param name="fileStream">File stream.</param>
-        Task<bool> ProcessDFSAsync(Stream fileStream);
+        Task<Tuple<SkiDFSResponse, bool>> ProcessDFSAsync(Stream fileStream);
     }
 }
