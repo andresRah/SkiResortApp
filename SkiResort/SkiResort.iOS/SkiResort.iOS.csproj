@@ -124,6 +124,10 @@
     <BundleResource Include="Resources\xamarin_logo%402x.png" />
     <BundleResource Include="Resources\xamarin_logo%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <BundleResource Include="Resources\screenTwoE.jpeg" />
+    <BundleResource Include="Resources\screenOneE.jpeg" />
+    <BundleResource Include="Resources\screenThreeE.jpeg" />
+    <BundleResource Include="Resources\screenFourE.jpeg" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -137,7 +141,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\SkiResort\SkiResort.csproj">
-      <Project>{7B01B7DD-168D-425C-9E0A-1BB0A3FCAD00}</Project>
+      <Project>{5C3F1AE0-EE0C-4FAF-B81D-EF0EA811B6D4}</Project>
       <Name>SkiResort</Name>
     </ProjectReference>
   </ItemGroup>

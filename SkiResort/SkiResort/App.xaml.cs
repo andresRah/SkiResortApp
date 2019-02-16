@@ -13,8 +13,7 @@ namespace SkiResort
         {
             InitializeComponent();
 
-
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new WelcomeScreen());
         }
 
         protected override void OnStart()

@@ -6,7 +6,7 @@ namespace SkiResort.Models
 {
     public enum MenuItemType
     {
-        Browse,
+        SkiTest,
         About
     }
     public class HomeMenuItem

@@ -18,7 +18,7 @@ namespace SkiResort.Views
 
             menuItems = new List<HomeMenuItem>
             {
-                new HomeMenuItem {Id = MenuItemType.Browse, Title="Browse" },
+                new HomeMenuItem {Id = MenuItemType.SkiTest, Title="SkiTest" },
                 new HomeMenuItem {Id = MenuItemType.About, Title="About" }
             };
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="SkiResort.Views.WelcomeScreen"
+             NavigationPage.HasNavigationBar="false"
+             BackgroundColor="Black">
+   <ContentPage.Content>
+        <Grid>  
+            <Image x:Name="image"
+                   Opacity="1"
+                   Source="screenOneE.jpeg"
+                   Aspect="AspectFill">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnChartTapGestureTap" NumberOfTapsRequired="1" />
+               </Image.GestureRecognizers>
+            </Image>
+                 
+            <StackLayout Orientation="Horizontal" Spacing="0" VerticalOptions="Center" 
+                         HorizontalOptions="FillAndExpand" HeightRequest="150"  
+                         BackgroundColor="#77000000" >
+    
+                    <BoxView BackgroundColor="#1473e6" WidthRequest="5"></BoxView>
+                    
+                    <Grid HorizontalOptions="Start"  Padding="20" VerticalOptions="Center"  >
+                        <Label TextColor="White" Text="Test - Kitzbühel ski resort in Austria" 
+                        FontAttributes="Bold" FontSize="30" />               
+                    </Grid>
+            </StackLayout>
+            
+            <StackLayout Padding="20" VerticalOptions="End" Spacing="10">
+
+            <Button Text="Start test" TextColor="White" BackgroundColor="#1473e6" 
+                    Clicked="Handle_Clicked"
+                    HeightRequest="40" VerticalOptions="End"/>
+            <Label Text="just some tap button" HorizontalTextAlignment="Center" FontSize="12" TextColor="Black"></Label>
+            </StackLayout>
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>
