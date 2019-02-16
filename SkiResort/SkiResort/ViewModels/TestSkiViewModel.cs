@@ -58,7 +58,7 @@ namespace SkiResort.ViewModels
                 {
                     FileData fileSelected = await CrossFilePicker.Current.PickFile();
 
-                    string extension = Path.GetExtension(fileSelected.FilePath);
+                    string extension = Path.GetExtension(fileSelected.FileName);
 
                     if (!allowedFilesTypesExts.Any(x => x.Equals(extension)))
                     {
