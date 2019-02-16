@@ -111,28 +111,25 @@
                 IsBusy = true;
                 await Task.Delay(50);
 
-                if (Device.OS != TargetPlatform.iOS)
+                FileData fileSelected = await CrossFilePicker.Current.PickFile();
+
+                string extension = Path.GetExtension(fileSelected.FileName);
+
+                if (!allowedFilesTypesExts.Any(x => x.Equals(extension)))
                 {
-                    FileData fileSelected = await CrossFilePicker.Current.PickFile();
-
-                    string extension = Path.GetExtension(fileSelected.FileName);
-
-                    if (!allowedFilesTypesExts.Any(x => x.Equals(extension)))
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Challenge", "Not compatible file!!!", "Ok");
-                        return;
-                    }
-
-                    var resultDFSProcess = await ProcessFileAsync(fileSelected);
-
-                    if (!resultDFSProcess.Item2)
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Challenge", "Get maximum path and drop failed!!!", "Ok");
-                        return;
-                    }
-
-                    ResultPathAndDrop = resultDFSProcess?.Item1;
+                    await Application.Current.MainPage.DisplayAlert("Challenge", "Not compatible file!!!", "Ok");
+                    return;
                 }
+
+                var resultDFSProcess = await ProcessFileAsync(fileSelected);
+
+                if (!resultDFSProcess.Item2)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Challenge", "Get maximum path and drop failed!!!", "Ok");
+                    return;
+                }
+
+                ResultPathAndDrop = resultDFSProcess?.Item1;
             }
             catch (Exception ex)
             {

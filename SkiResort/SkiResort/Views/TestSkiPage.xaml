@@ -125,9 +125,9 @@
                                 <Grid HorizontalOptions="StartAndExpand" Margin="5">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="30" />
-                                        <ColumnDefinition Width="10*" />
-                                        <ColumnDefinition Width="10*" />
-                                        <ColumnDefinition Width="10*" />
+                                        <ColumnDefinition Width="60*" />
+                                        <ColumnDefinition Width="60*" />
+                                        <ColumnDefinition Width="60*" />
                                     </Grid.ColumnDefinitions>
                                     
                                     <StackLayout Grid.Column="0" 
