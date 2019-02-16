@@ -87,6 +87,8 @@
     <AndroidResource Include="Resources\drawable\screenFourE.jpeg" />
     <AndroidResource Include="Resources\drawable\screenOneE.jpeg" />
     <AndroidResource Include="Resources\drawable\screenTwoE.jpeg" />
+    <AndroidResource Include="Resources\drawable\stars.png" />
+    <AndroidResource Include="Resources\drawable\goal.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />

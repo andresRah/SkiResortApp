@@ -128,6 +128,8 @@
     <BundleResource Include="Resources\screenOneE.jpeg" />
     <BundleResource Include="Resources\screenThreeE.jpeg" />
     <BundleResource Include="Resources\screenFourE.jpeg" />
+    <BundleResource Include="Resources\goal.png" />
+    <BundleResource Include="Resources\stars.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

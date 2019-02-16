@@ -1,12 +1,14 @@
 ﻿namespace SkiResort.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using Plugin.FilePicker;
     using Plugin.FilePicker.Abstractions;
+    using SkiResort.Models;
     using SkiResort.Services;
     using Xamarin.Forms;
 
@@ -15,6 +17,12 @@
     /// </summary>
     public class TestSkiViewModel : BaseViewModel
     {
+
+        /// <summary>
+        /// The result path and drop.
+        /// </summary>
+        public SkiDFSResponse ResultPathAndDrop { get; set; }
+
         /// <summary>
         /// Gets or sets the command load file.
         /// </summary>
@@ -33,6 +41,20 @@
         {
             Title = "TestSki";
             RegisterCommands();
+
+            ResultPathAndDrop = new SkiDFSResponse
+            {
+                MaxDrop = 56,
+                MaxPath = 45,
+                ResultPointsList = new List<PointsSkiDFSResponse>()
+                {
+                   new PointsSkiDFSResponse { XCoord = 5, YCoord = 9, Altitude = 12},
+                   new PointsSkiDFSResponse { XCoord = 7, YCoord = 6, Altitude = 55},
+                   new PointsSkiDFSResponse { XCoord = 8, YCoord = 3, Altitude = 78},
+                   new PointsSkiDFSResponse { XCoord = 13, YCoord = 2, Altitude = 44},
+                   new PointsSkiDFSResponse { XCoord = 56, YCoord = 34, Altitude = 45}
+                }
+            };
         }
 
         /// <summary>
