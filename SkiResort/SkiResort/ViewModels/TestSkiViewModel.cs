@@ -111,7 +111,7 @@
                 IsBusy = true;
                 await Task.Delay(50);
 
-                if (Device.OS == TargetPlatform.Android)
+                if (Device.OS != TargetPlatform.iOS)
                 {
                     FileData fileSelected = await CrossFilePicker.Current.PickFile();
 
