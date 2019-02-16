@@ -4,10 +4,10 @@
              x:Class="SkiResort.Views.TestSkiPage"
              xmlns:vm="clr-namespace:SkiResort.ViewModels"
              NavigationPage.HasNavigationBar="false"
-             Title="Test">
+             Title="{Binding Title}">
     
     <ContentPage.BindingContext>
-        <vm:AboutViewModel />
+        <vm:TestSkiViewModel />
     </ContentPage.BindingContext>
     
     <ContentPage.Resources>
@@ -75,7 +75,7 @@
                 
                 <Button Margin="0,5,0,0" Text="Search file"
                         CornerRadius="10"
-                        Command="{Binding OpenWebCommand}"
+                        Command="{Binding CommandLoadFile}"
                         FontSize="15"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
