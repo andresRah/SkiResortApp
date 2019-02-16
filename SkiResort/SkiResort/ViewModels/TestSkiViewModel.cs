@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Plugin.FilePicker;
+using Plugin.FilePicker.Abstractions;
+using SkiResort.Services;
 using Xamarin.Forms;
 
 namespace SkiResort.ViewModels
@@ -38,15 +40,14 @@ namespace SkiResort.ViewModels
         /// </summary>
         private void RegisterCommands() 
         {
-            //CommandLoadFile = new Command(async (e) => await LoadFileAsync());
-            CommandLoadFile = new Command(async () => await LoadFileAsync());
+            CommandLoadFile = new Command(async () => await SelectFileAsync());
         }
 
         /// <summary>
         /// Loads the file async.
         /// </summary>
         /// <returns>The file async.</returns>
-        private async Task LoadFileAsync()
+        private async Task SelectFileAsync()
         {
             try
             {
@@ -55,7 +56,7 @@ namespace SkiResort.ViewModels
 
                 if (Device.OS == TargetPlatform.Android)
                 {
-                    var fileSelected = await CrossFilePicker.Current.PickFile();
+                    FileData fileSelected = await CrossFilePicker.Current.PickFile();
 
                     string extension = Path.GetExtension(fileSelected.FilePath);
 
@@ -64,6 +65,12 @@ namespace SkiResort.ViewModels
                         await Application.Current.MainPage.DisplayAlert("Challenge", "Not compatible file", "Ok");
                         return;
                     }
+
+                    Stream fileStream = fileSelected.GetStream();
+
+                    SkiDFSPathService SkiDFSPath = new SkiDFSPathService();
+
+                    SkiDFSPath.Process(fileStream);
                 }
             }
             catch (Exception ex)
