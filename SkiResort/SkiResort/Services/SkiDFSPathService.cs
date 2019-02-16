@@ -3,6 +3,8 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
+    using Xamarin.Forms;
 
     public class SkiDFSPathService : ISkiDFSPathService
     {
@@ -17,12 +19,17 @@
         private int columnsCount { get; set; }
 
 
-        public void Process(Stream fileStream) 
+        /// <summary>
+        /// Processes the async.
+        /// </summary>
+        /// <returns>The async.</returns>
+        /// <param name="fileStream">File stream.</param>
+        public async Task ProcessAsync(Stream fileStream) 
         {
             #region 1. Read and define GeoMap array from file and the differents Paths and Drops into arrays.
-            Tuple<int, int, int[,], bool> fileRead = ReadAndDecodeFile(fileStream);
+            Tuple<int, int, int[,], bool> fileRead = await ReadAndDecodeFileAsync(fileStream);
 
-            if (fileRead.Item4 == false) { Console.WriteLine("File malformed"); return; }
+            if (fileRead.Item4 == false) { await Application.Current.MainPage.DisplayAlert("Challenge", "Malformed file", "Ok"); return; }
 
             rowsCount = fileRead.Item1;
             columnsCount = fileRead.Item2;
@@ -36,13 +43,20 @@
 
         }
 
-        private static Tuple<int, int, int[,], bool> ReadAndDecodeFile(Stream fileStream)
+        /// <summary>
+        /// Reads the and decode file.
+        /// </summary>
+        /// <returns>The and decode file.</returns>
+        /// <param name="fileStream">File stream.</param>
+        private async Task<Tuple<int, int, int[,], bool>> ReadAndDecodeFileAsync(Stream fileStream)
         {
             var result = Tuple.Create(0, 0, new int[,] { }, false);
 
             using (StreamReader skiingFile = new StreamReader(fileStream))
             {
-                string[] firstLine = skiingFile.ReadLine().Split(' ');
+                var line = await skiingFile.ReadLineAsync();
+
+                string[] firstLine = line.Split(' ');
 
                 if (firstLine.Count() != 2)
                     return result;
@@ -51,7 +65,7 @@
                 int columnsNumber = Convert.ToInt32(firstLine.Last());
                 int dimensions = (rowsNumber * columnsNumber);
 
-                int[,] contentFile = ReadFile(skiingFile, rowsNumber, columnsNumber);
+                int[,] contentFile = await ReadFileAsync(skiingFile, rowsNumber, columnsNumber);
 
                 if (contentFile?.Length == 0)
                     return result;
@@ -65,13 +79,13 @@
         }
 
         /// <summary>
-        /// Reads the file.
+        /// Reads the file async.
         /// </summary>
-        /// <param name="skiingFile">The skiing file.</param>
-        /// <param name="rowsNumber">The rows number.</param>
-        /// <param name="columnsNumber">The columns number.</param>
-        /// <returns></returns>
-        private static int[,] ReadFile(StreamReader skiingFile, int rowsNumber, int columnsNumber)
+        /// <returns>The file async.</returns>
+        /// <param name="skiingFile">Skiing file.</param>
+        /// <param name="rowsNumber">Rows number.</param>
+        /// <param name="columnsNumber">Columns number.</param>
+        private async Task<int[,]> ReadFileAsync(StreamReader skiingFile, int rowsNumber, int columnsNumber)
         {
             int[,] contentFile = null;
 
@@ -81,7 +95,7 @@
                 contentFile = new int[rowsNumber, columnsNumber];
                 int a = 0;
 
-                while ((line = skiingFile.ReadLine()) != null)
+                while ((line = await skiingFile.ReadLineAsync()) != null)
                 {
                     var row = line.Split(' ').ToList();
 

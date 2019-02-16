@@ -18,7 +18,14 @@
             <Color x:Key="LightTextColor">#636363</Color>
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+        <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout BackgroundColor="Transparent"
+                         Padding="10,0"     
+                         Margin="0,12"
+                         Spacing="0"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         AbsoluteLayout.LayoutBounds="0,0,1,1">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -82,4 +89,36 @@
             </StackLayout>
         </ScrollView>
     </Grid>
+           </StackLayout>
+             <StackLayout IsVisible="{Binding IsBusy}" 
+                         AbsoluteLayout.LayoutFlags="All" 
+                         AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <AbsoluteLayout HorizontalOptions="FillAndExpand" 
+                                VerticalOptions="FillAndExpand">
+                    <StackLayout VerticalOptions="FillAndExpand" 
+                                AbsoluteLayout.LayoutFlags="All" 
+                             AbsoluteLayout.LayoutBounds="0,0,1,1" 
+                             BackgroundColor="White" 
+                             Opacity="0.9"></StackLayout>
+                    <StackLayout BackgroundColor="Transparent"
+                             VerticalOptions="CenterAndExpand" 
+                             AbsoluteLayout.LayoutFlags="All" 
+                             AbsoluteLayout.LayoutBounds="0,0,1,1">
+                        <ActivityIndicator  IsRunning="{Binding IsBusy}" 
+                                        IsVisible="{Binding IsBusy}"
+                                        HorizontalOptions="CenterAndExpand"
+                                        BackgroundColor="Transparent"
+                                        Color="{StaticResource Primary}">
+                            <ActivityIndicator.Scale>
+                                <OnIdiom x:TypeArguments="x:Double"
+                                     Phone="1"
+                                     Tablet="1.5" />
+                            </ActivityIndicator.Scale>
+                        </ActivityIndicator>
+                        <Label HorizontalOptions="Center" Margin="0,5" TextColor="{StaticResource Primary}" Text="Loading"/>
+                    </StackLayout>
+                </AbsoluteLayout>
+            </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
 </ContentPage>

@@ -70,7 +70,7 @@ namespace SkiResort.ViewModels
 
                     SkiDFSPathService SkiDFSPath = new SkiDFSPathService();
 
-                    SkiDFSPath.Process(fileStream);
+                    SkiDFSPath.ProcessAsync(fileStream);
                 }
             }
             catch (Exception ex)
